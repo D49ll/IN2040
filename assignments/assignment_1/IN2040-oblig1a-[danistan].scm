@@ -123,3 +123,6 @@ Verdien som returneres er #f
 ;; 
 
 ;;---------------------------------------------------------------
+;; Oppgave 2 (b)
+(define (sign x)
+  (if (x < 0)
