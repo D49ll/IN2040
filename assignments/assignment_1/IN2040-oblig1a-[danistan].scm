@@ -1,8 +1,8 @@
 ;; Innlevering 1a i IN2040 (Høst 2021)
 
 
-;; ******************| Hjelpenotater |*********************************************
-#|Standardrelger for evaluering:
+;; ******************| Hjelpenotater fra folier |*************************************
+#|Standardrelger for evaluering :
 
 Først evalueres alle enkelt-uttrykkene, så kalles prosedyren på argumentverdiene
  - Symboler evalueres til bundet verdi
@@ -180,24 +180,157 @@ and-prosedyren evaluerer frem til første #f
 ;; Oppgave 3b
 
 (define (plus a b)
-  (if (zero? a)                
+  (if (zero? a);;Basistilfellet som terminerer den rekrusive prosessen                
       b
-      (add1 (plus (sub1 a) b))))
+      (add1 (plus (sub1 a) b))));;Den rekrusive prosedyren. 
 
 #|Kommentar til den rekrusive prosessen:
-Her har jeg prøvd å vise hvordan prosessen med argumentene a = 5 og b = 5
+Her har jeg prøvd å vise prosessen med argumentene a = 5 og b = 5
 
-(plus 5 5)
-(add1 (plus 4 5))
-(add1 (add1 (plus 3 5)
-(add1 (add1 (add1 (plus 2 5))))
-(add1 (add1 (add1 (add1 (plus 1 5)))))
-(add1 (add1 (add1 (add1 (add1 (plus 0 5))))))
-(add1 (add1 (add1 (add1 (+ 5 1)))))
-(add1 (add1 (add1 (+ 6 1))))
-(add1 (add1 (+ 7 1)))
-(add1 (+ 8 1))
-(+ 9 1)
-10
+?(plus 5 5)
+(+ 1 (plus 4 5))
+(+ 1 (+ 1 (plus 3 5)
+(+ 1 (+ 1 (+ 1 (plus 2 5))))
+(+ 1 (+ 1 (+ 1 (+ 1 (plus 1 5)))))
+(+ 1 (+ 1 (+ 1 (+ 1 (+ 1 (plus 0 5))))))
+(+ 1 (+ 1 (+ 1 (+ 1 (+ 1 5)))))
+(+ 1 (+ 1 (+ 1 (+ 1 6))))
+(+ 1 (+ 1 (+ 1 7)))
+(+ 1 (+ 1 8))
+(+ 1 9)
+->10
 
 |#
+
+
+;;---------------------------------------------------------------
+;; Oppgave 3c
+
+#| Analyse av den rekrusive prosessen i 3b:
+
+En rekrusiv prosess etterlater ventende prosedyrekall.
+Disse kallene legges til i minnestacken frem prosessen oppnår basistilfellet (a = 0).
+Først da begynner prosessen å regne ut. Dette er tilfellet i prosessen definert i oppgave 3b.
+
+En iterativ prosessen derimot bruker en tellevariabel for å definere basistilfellet
+og en akkumulatorvariabel som akkumulerer resultatet fortløpende. Dette gjør at minnestacken ikke vokser.
+Det er viktig å merke at en iterativ prosess vil inneholde et rekrusiv prosedyre, men pga tellevariablen
+og akkumulatorvariablen kan prosessen til enhver til oppsummere resultatet basert på disse inputene.
+
+|#
+
+(define (iter-plus a b)
+  (define (iter prod count)  ;; Definerer iter med akkumulatorvariabelen prod og tellevariabelen count som argumenter.
+    (if (> count a)          ;; Definerer basistilfellet, dvs når count > a returneres den akkumulerte verdien prod.
+        prod
+        (iter (add1 prod)    ;; Her akkumuleres prod. Dette er det rekrusive kallet og står i haleposisjonen.
+              (add1 count))));; Her økes tellevariablen med 1, helt til a+1.
+
+  (iter b 1))                ;; Kroppen til "iter-plus". Merk at prod er initiert til verdien b og count til 1.
+
+
+#|Kommentar til den iterative prosessen
+Her har jeg prøvd å vise prosessen med argumentene a = 4 og b = 5
+
+?(iter-plus 4 5)
+(iter 5 1)
+(iter 6 2)
+(iter 7 3)
+(iter 8 4)
+(iter 9 5)
+->9
+
+|#
+
+
+;;---------------------------------------------------------------
+;; Oppgave 3d
+
+
+;; Skriv om til 
+(define (power-close-to b n)
+  (power-iter b n 1))
+(define (power-iter b n e)
+  (if (> (expt b e) n)
+      e
+      (power-iter b n (+ 1 e))))
+
+
+(define (power-close-to b n)
+  (define (power-iter prod count)
+    (if (> (expt b prod) n)
+        prod
+        (power-iter (+ 1 prod)
+                    (
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
