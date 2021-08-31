@@ -139,3 +139,15 @@ Verdien som returneres er #f
 
 ;;---------------------------------------------------------------
 ;; Oppgave 2 (c)
+
+;; or-prosedyren evaluerer frem til første #t
+;; and-prosedyren evaluerer frem til første #f
+
+
+(define (pred-sign x)
+  (or (and (> x 0) ;;Dersom x > 0 = #t evalueres 1 (som er #t) og 1 returneres 
+                   ;;Dersom x > 0 = #f evalueres ikke 1, og or-prosedyren fortsetter til neste utrykk
+           1)      
+      (and (< x 0) ;;Dersom x < 0 = #t evalueres -1 (som er #t) og -1 returneres 
+           -1)     ;;Dersom x < 0 = #f evalueres ikke -1, og or-prosedyren fortsetter til neste utrykk
+      0))          ;;Evaluerer 0 = #t, dermed finner or-prosedyren første #t og returner den
