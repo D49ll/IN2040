@@ -121,8 +121,21 @@ Verdien som returneres er #f
     (i-am-undef))
 ;; Testen her er om 42 er positiv. Noe den alltid vil være.
 ;; 
-
+ 
 ;;---------------------------------------------------------------
 ;; Oppgave 2 (b)
-(define (sign x)
-  (if (x < 0)
+
+(define (if-sign x)
+  (if (> x 0)    ;; første sjekk, (x > 0)
+      1          ;; dersom sant, returner 1
+      (if (< x 0);; dersom usant, sjekk (x < 0)
+          -1     ;; dersom sant, returner -1
+          0)))   ;; dersom usant, returner 0
+
+(define (cond-sign x)
+  (cond ((> x 0) 1) ;; returner 1 dersom x > 0
+        ((< x 0) -1);; returner -1 dersom x < 0
+        (else 0)))  ;; returner 0 for alle andre tilfeller, dvs x = 0
+
+;;---------------------------------------------------------------
+;; Oppgave 2 (c)
