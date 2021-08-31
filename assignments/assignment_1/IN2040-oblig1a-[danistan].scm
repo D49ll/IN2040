@@ -26,8 +26,9 @@ Schemes evalueringsregel:
 
   2) Anvend operatoren (det første utrykket i lista) på veridene til de andre utrykkene.|#
 
-;;******************| Oppgave 1| *********************************************
-;; Oppgave 1 (a)
+;;******************| Oppgave 1 |******************
+;; Oppgave 1a
+
 (* (+ 4 2) 5)
 
 #|Svar:
@@ -37,8 +38,9 @@ Først evalueres prosedyre "+" med argumentene 4 og 2
 Deretter evalueres prosedyren "*" med argumentene 6 og 5
       -> (* 6 5) = 30|#
 
-;;---------------------------------------------------------------
-;; Oppgave 1 (b)
+;;-------------------------------------------------
+;; Oppgave 1b
+
 ;; (* (+ 4 2) (5))
 
 #|Svar:
@@ -46,16 +48,18 @@ Deretter evalueres prosedyren "*" med argumentene 6 og 5
 Første element i en liste er prefikset en operator.
 Her kalles prosedyren 5, som ikke finnes.|#
 
-;;---------------------------------------------------------------
-;; Oppgave 1 (c)
+;;-------------------------------------------------
+;; Oppgave 1c
+
 ;; (* (4 + 2) 5)
 
 #|Svar:
 (4 + 2) vil gi feilmelding.
 Her kalles prosedyre 4, som ikke finnes, med argumentene + og 2|#
 
-;;---------------------------------------------------------------
-;; Oppgave 1 (d)
+;;-------------------------------------------------
+;; Oppgave 1d
+
 (define bar (/ 44 2))
 bar
 
@@ -66,8 +70,9 @@ først evalueres prosedyre "/" med argumentene 44 og 2
       -> (/ 44 2) = 22
 deretter bindes verdien 22 til variablen "bar".|#
 
-;;---------------------------------------------------------------
-;; Oppgave 1 (e)
+;;-------------------------------------------------
+;; Oppgave 1e
+
 (- bar 11)
 
 #| Svar:
@@ -75,8 +80,9 @@ Først evalueres bar, dvs bar = 22
 Deretter kalles prosedyre "-" med argumentene 22 og 11.
       -> (- 22 11) = 11|#
 
-;;---------------------------------------------------------------
-;; Oppgave 1 (f)
+;;-------------------------------------------------
+;; Oppgave 1f
+
 (/ (* bar 3 4 1) bar)
 
 #| Svar:
@@ -89,8 +95,8 @@ Så evalueres symbolet i ytre utrykk.
 Til slutt så evalueres prosedyre "/" med argumentene 264 og 22.
       -> (/ 264 22) = 12|#
 
-;;******************| Oppgave 2| *********************************************
-;; Oppgave 2 (a)
+;;******************| Oppgave 2 |******************
+;; Oppgave 2a
 
 #|Special form:
   Styrer selv om og når argumentene evalueres
@@ -117,7 +123,7 @@ Verdien som returneres er "paff".
      "piff"
      (zero? (1 - 1)))
 #|Kommentar til prosedyren:
-Dette vil være omtrent samme tilfellet som or-prosedyre.
+Dette vil være omtrent samme tilfellet som or-prosedyre, forskjellen er at den stopper å evaluere ved første #f.
 Første uttrykk (= 1 2) = #f, dermed vil de resterende uttrykkene ikke evalueres.
 Dette gjør and-prosedyren til en "special form".
 Verdien som returneres er #f
@@ -132,7 +138,7 @@ ved første test og ikke evaluere else-casen.
 |# 
  
 ;;---------------------------------------------------------------
-;; Oppgave 2 (b)
+;; Oppgave 2b
 
 (define (if-sign x)
   (if (> x 0)    ;; første sjekk, (x > 0)
@@ -147,7 +153,7 @@ ved første test og ikke evaluere else-casen.
         (else 0)))  ;; returner 0 for alle andre tilfeller, dvs x = 0
 
 ;;---------------------------------------------------------------
-;; Oppgave 2 (c)
+;; Oppgave 2c
 
 #|Husk:
 or-prosedyren evaluerer frem til første #t
@@ -155,14 +161,14 @@ and-prosedyren evaluerer frem til første #f
 |#
 
 (define (pred-sign x)
-  (or (and (> x 0) ;;Dersom x > 0 = #t evalueres 1 (som er #t) og 1 returneres 
+  (or (and (> x 0) ;;Dersom x > 0 = #t evalueres 1 (som er #t) og returneres 
             1)     ;;Dersom x > 0 = #f evalueres ikke 1, og or-prosedyren fortsetter til neste utrykk
-      (and (< x 0) ;;Dersom x < 0 = #t evalueres -1 (som er #t) og -1 returneres 
+      (and (< x 0) ;;Dersom x < 0 = #t evalueres -1 (som er #t) og returneres 
            -1)     ;;Dersom x < 0 = #f evalueres ikke -1, og or-prosedyren fortsetter til neste utrykk
       0))          ;;Evaluerer 0 = #t, dermed finner or-prosedyren første #t og returner den
 
-;;******************| Oppgave 3| *********************************************
-;; Oppgave 3 (a)
+;;******************| Oppgave 3 |******************
+;; Oppgave 3a
 
 (define (add1 x)
   (+ x 1))
@@ -171,7 +177,7 @@ and-prosedyren evaluerer frem til første #f
   (- x 1))
 
 ;;---------------------------------------------------------------
-;; Oppgave 3 (b)
+;; Oppgave 3b
 
 (define (plus a b)
   (if (zero? a)                
@@ -187,11 +193,11 @@ Her har jeg prøvd å vise hvordan prosessen med argumentene a = 5 og b = 5
 (add1 (add1 (add1 (plus 2 5))))
 (add1 (add1 (add1 (add1 (plus 1 5)))))
 (add1 (add1 (add1 (add1 (add1 (plus 0 5))))))
-(add1 (add1 (add1 (add1 (add1 5)))))
-(add1 (add1 (add1 (add1 6))))
-(add1 (add1 (add1 7)))
-(add1 (add1 8))
-(add1 9)
+(add1 (add1 (add1 (add1 (+ 5 1)))))
+(add1 (add1 (add1 (+ 6 1))))
+(add1 (add1 (+ 7 1)))
+(add1 (+ 8 1))
+(+ 9 1)
 10
 
 |#
