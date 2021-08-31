@@ -1,5 +1,7 @@
 ;; Innlevering 1a i IN2040 (Høst 2021)
 
+
+;; ******************| Hjelpenotater |*********************************************
 #|Standardrelger for evaluering:
 
 Først evalueres alle enkelt-uttrykkene, så kalles prosedyren på argumentverdiene
@@ -24,7 +26,7 @@ Schemes evalueringsregel:
 
   2) Anvend operatoren (det første utrykket i lista) på veridene til de andre utrykkene.|#
 
-;;---------------------------------------------------------------
+;;******************| Oppgave 1| *********************************************
 ;; Oppgave 1 (a)
 (* (+ 4 2) 5)
 
@@ -87,10 +89,11 @@ Så evalueres symbolet i ytre utrykk.
 Til slutt så evalueres prosedyre "/" med argumentene 264 og 22.
       -> (/ 264 22) = 12|#
 
-;;***************************************************************
+;;******************| Oppgave 2| *********************************************
 ;; Oppgave 2 (a)
 
-#|Special form: Styrer selv om og når argumentene evalueres
+#|Special form:
+  Styrer selv om og når argumentene evalueres
      - if og cond: utfallet av testene avgjør hvilke uttrykk som skal evalueres
      - or og and: evaluerer utrykkene én av gangen, fra venstre til høyre
      - Alt utenom #f teller som sant.|#
@@ -99,18 +102,22 @@ Til slutt så evalueres prosedyre "/" med argumentene 264 og 22.
     "paff"
     "piff"
     (zero? (1 - 1)))
-;; Selv om det er en syntax feil i siste linje, vil det ikke gi en feilmelding.
-;; Dette er fordi siste linje ikke blir evaluert, da "paff" = #t.
-;; or-prosedyren vil stoppe evaluering av utrykk ved første tilfelle av sant.
-;; Dette gjør or-prosedyren til "special form", da den selv velger hvilke utrykk som skal evalueres.
-;; Her vil (= 1 2) = #f, men "paff" = #t, dermed blir ikke "piff" og (zero? (1 - 1)) evaluert.
-;; Verdien som returneres er "paff".
+
+#|Kommentar til prosedyren:
+Selv om det er en syntax feil i siste linje, vil det ikke gi en feilmelding.
+Dette er fordi siste linje ikke blir evaluert, da "paff" = #t.
+or-prosedyren vil stoppe evaluering av utrykk ved første tilfelle av sant.
+Dette gjør or-prosedyren til "special form", da den selv velger hvilke utrykk som skal evalueres.
+Her vil (= 1 2) = #f, men "paff" = #t, dermed blir ikke "piff" og (zero? (1 - 1)) evaluert.
+Verdien som returneres er "paff".
+|#
 
 (and (= 1 2)
      "paff"
      "piff"
      (zero? (1 - 1)))
-#|Dette vil være omtrent samme tilfellet som or-prosedyre.
+#|Kommentar til prosedyren:
+Dette vil være omtrent samme tilfellet som or-prosedyre.
 Første uttrykk (= 1 2) = #f, dermed vil de resterende uttrykkene ikke evalueres.
 Dette gjør and-prosedyren til en "special form".
 Verdien som returneres er #f
@@ -119,8 +126,10 @@ Verdien som returneres er #f
 (if (positive? 42)
     "poff"
     (i-am-undef))
-;; Testen her er om 42 er positiv. Noe den alltid vil være.
-;; 
+#|Kommentar til prosedyren:
+42 er alltid positiv i dette tilfellet. Dermed vil if-prosedyren stoppe
+ved første test og ikke evaluere else-casen.
+|# 
  
 ;;---------------------------------------------------------------
 ;; Oppgave 2 (b)
@@ -140,14 +149,49 @@ Verdien som returneres er #f
 ;;---------------------------------------------------------------
 ;; Oppgave 2 (c)
 
-;; or-prosedyren evaluerer frem til første #t
-;; and-prosedyren evaluerer frem til første #f
-
+#|Husk:
+or-prosedyren evaluerer frem til første #t
+and-prosedyren evaluerer frem til første #f
+|#
 
 (define (pred-sign x)
   (or (and (> x 0) ;;Dersom x > 0 = #t evalueres 1 (som er #t) og 1 returneres 
-                   ;;Dersom x > 0 = #f evalueres ikke 1, og or-prosedyren fortsetter til neste utrykk
-           1)      
+            1)     ;;Dersom x > 0 = #f evalueres ikke 1, og or-prosedyren fortsetter til neste utrykk
       (and (< x 0) ;;Dersom x < 0 = #t evalueres -1 (som er #t) og -1 returneres 
            -1)     ;;Dersom x < 0 = #f evalueres ikke -1, og or-prosedyren fortsetter til neste utrykk
       0))          ;;Evaluerer 0 = #t, dermed finner or-prosedyren første #t og returner den
+
+;;******************| Oppgave 3| *********************************************
+;; Oppgave 3 (a)
+
+(define (add1 x)
+  (+ x 1))
+
+(define (sub1 x)
+  (- x 1))
+
+;;---------------------------------------------------------------
+;; Oppgave 3 (b)
+
+(define (plus a b)
+  (if (zero? a)                
+      b
+      (add1 (plus (sub1 a) b))))
+
+#|Kommentar til den rekrusive prosessen:
+Her har jeg prøvd å vise hvordan prosessen med argumentene a = 5 og b = 5
+
+(plus 5 5)
+(add1 (plus 4 5))
+(add1 (add1 (plus 3 5)
+(add1 (add1 (add1 (plus 2 5))))
+(add1 (add1 (add1 (add1 (plus 1 5)))))
+(add1 (add1 (add1 (add1 (add1 (plus 0 5))))))
+(add1 (add1 (add1 (add1 (add1 5)))))
+(add1 (add1 (add1 (add1 6))))
+(add1 (add1 (add1 7)))
+(add1 (add1 8))
+(add1 9)
+10
+
+|#
