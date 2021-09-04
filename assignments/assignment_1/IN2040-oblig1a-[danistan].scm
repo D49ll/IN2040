@@ -1,8 +1,16 @@
 ;; Innlevering 1a i IN2040 (Høst 2021)
 
 
-;; ******************| Hjelpenotater fra folier |*************************************
+;;******************| Hjelpenotater fra folier |******************
 #|Standardrelger for evaluering :
+
+Schemes evalueringsregel:
+  1) Evaluer enkelt-utrykkene i sammensetningen
+     a) Primitive utrykk (tall, strenger etc): evalueres til seg selv
+     b) Variabler: Evalueres til verdien de referer til
+     c) Sammensatte uttrykk: anvend 1) igjen.
+
+  2) Anvend operatoren (det første utrykket i lista) på veridene til de andre utrykkene.
 
 Først evalueres alle enkelt-uttrykkene, så kalles prosedyren på argumentverdiene
  - Symboler evalueres til bundet verdi
@@ -16,15 +24,9 @@ NB! Unntak fra disse reglene er såkalte "special forms"
 
 Kort fortalt:
 Prosedyrer: Først evalueres alle argumentene, så anvendes prosedyren
-Special forms: styrer selv om og når argumentene evalueres
+Special forms: styrer selv om og når argumentene evalueres|#
 
-Schemes evalueringsregel:
-  1) Evaluer enkelt-utrykkene i sammensetningen
-     a) Primitive utrykk (tall, strenger etc): evalueres til seg selv
-     b) Variabler: Evalueres til verdien de referer til
-     c) Sammensatte uttrykk: anvend 1) igjen.
 
-  2) Anvend operatoren (det første utrykket i lista) på veridene til de andre utrykkene.|#
 
 ;;******************| Oppgave 1 |******************
 ;; Oppgave 1a
@@ -122,6 +124,7 @@ Verdien som returneres er "paff".
      "paff"
      "piff"
      (zero? (1 - 1)))
+
 #|Kommentar til prosedyren:
 Dette vil være omtrent samme tilfellet som or-prosedyre, forskjellen er at den stopper å evaluere ved første #f.
 Første uttrykk (= 1 2) = #f, dermed vil de resterende uttrykkene ikke evalueres.
@@ -132,6 +135,7 @@ Verdien som returneres er #f
 (if (positive? 42)
     "poff"
     (i-am-undef))
+
 #|Kommentar til prosedyren:
 42 er alltid positiv i dette tilfellet. Dermed vil if-prosedyren stoppe
 ved første test og ikke evaluere else-casen.
@@ -174,7 +178,7 @@ and-prosedyren evaluerer frem til første #f
   (+ x 1))
 
 (define (sub1 x)
-  (- x 1))
+  (- x 1)) 
 
 ;;---------------------------------------------------------------
 ;; Oppgave 3b
@@ -182,7 +186,8 @@ and-prosedyren evaluerer frem til første #f
 (define (plus a b)
   (if (zero? a);;Basistilfellet som terminerer den rekrusive prosessen                
       b
-      (add1 (plus (sub1 a) b))));;Den rekrusive prosedyren. 
+      (add1 (plus (sub1 a)
+                  b))));;Den rekrusive prosedyren. 
 
 #|Kommentar til den rekrusive prosessen:
 Her har jeg prøvd å vise prosessen med argumentene a = 5 og b = 5
@@ -246,29 +251,58 @@ Her har jeg prøvd å vise prosessen med argumentene a = 4 og b = 5
 ;;---------------------------------------------------------------
 ;; Oppgave 3d
 
-
-;; Skriv om til 
-(define (power-close-to b n)
-  (power-iter b n 1))
-(define (power-iter b n e)
-  (if (> (expt b e) n)
-      e
-      (power-iter b n (+ 1 e))))
-
+;; Under er power-close-to definert med power-iter som blokkstruktur.
 
 (define (power-close-to b n)
-  (define (power-iter prod count)
-    (if (> (expt b prod) n)
-        prod
-        (power-iter (+ 1 prod)
-                    (
+  (define (power-iter count)
+    (if (> (expt b count) n)
+        count
+        (power-iter (+ 1 count))))
+  (power-iter 1))
+        
+#|Kommentar til prosedyren:
+Ved å definere power-iter som en blokkstruktur av power-close-to slipper man å sende inn
+b og n som argumenter i power-iter, da disse nå er globale variabler innenfor power-close-to prosedyren.
+Det gjør dem tilgengelig for å kalles på i selve power-iter prosedyren.
+
+I tillegg så fungerer tellevariablen i dette tilfellet også som den akkumulerte variabelen prod. Dermed
+kan man forenkle definisjoen til power-iter fra å ta 3 argumenter til kun å ta 1 argument.
+|#                    
 
 
+;;---------------------------------------------------------------
+;; Oppgave 3e
 
 
+(define (fib n)
+  (define (fib-iter a b count)
+    (if (= count 0)
+        b
+        (fib-iter (+ a b)
+                  a
+                  (- count 1))))
+  (fib-iter 1 0 n))
 
 
+#|
+?(fib 7)
+(fib-iter 1 0 7)
+(fib-iter 1 1 6)
+(fib-iter 2 1 5)
+(fib-iter 3 2 4)
+(fib-iter 5 3 3)
+(fib-iter 8 5 2)
+(fib-iter 13 8 1)
+(fib-iter 21 13 0)
+-> 13
 
+Svar:
+Nei, man får ikke forenklet hjelpefunksjonen da fibonacci tallene er avhenging av å vite
+forrige verdi lagt sammen med "nåverdi", dvs vi er nødt til å ha 2 akkumulator verdier.
+I tillegg må hjelpefunksjonen initiere F(0)=b=0 og F(1)=a=1.
+
+Samtidig som man må ha en telleverdi for å vite hvor mange rekrusive kall vi skal utføre/har utført.
+|#
 
 
 
